@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/application"
 )
 
@@ -37,10 +37,10 @@ func (p *Portal) GetIngresses(ctx context.Context) []*netv1.Ingress { // nolint:
 	return []*netv1.Ingress{
 		{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      p.harbor.NormalizeComponentName(goharborv1alpha1.PortalName),
+				Name:      p.harbor.NormalizeComponentName(goharborv1alpha2.PortalName),
 				Namespace: p.harbor.Namespace,
 				Labels: map[string]string{
-					"app":      goharborv1alpha1.PortalName,
+					"app":      goharborv1alpha2.PortalName,
 					"harbor":   harborName,
 					"operator": operatorName,
 				},
@@ -56,7 +56,7 @@ func (p *Portal) GetIngresses(ctx context.Context) []*netv1.Ingress { // nolint:
 									{
 										Path: "/",
 										Backend: netv1.IngressBackend{
-											ServiceName: p.harbor.NormalizeComponentName(goharborv1alpha1.PortalName),
+											ServiceName: p.harbor.NormalizeComponentName(goharborv1alpha2.PortalName),
 											ServicePort: intstr.FromInt(PublicPort),
 										},
 									},

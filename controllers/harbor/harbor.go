@@ -14,8 +14,9 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/controllers/common"
+	"github.com/goharbor/harbor-operator/pkg/controllers/config"
 	"github.com/goharbor/harbor-operator/pkg/controllers/health"
 	"github.com/goharbor/harbor-operator/pkg/event-filter/class"
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
@@ -24,12 +25,6 @@ import (
 const (
 	DefaultRequeueWait = 2 * time.Second
 )
-
-type Config struct {
-	ClassName            string
-	ConcurrentReconciles int
-	WatchChildren        bool
-}
 
 // Reconciler reconciles a Harbor object
 type Reconciler struct {
@@ -41,7 +36,7 @@ type Reconciler struct {
 	RestConfig   *rest.Config
 	HealthClient health.Client
 
-	Config Config
+	Config config.Config
 }
 
 func (r *Reconciler) GetVersion() string {
@@ -65,7 +60,7 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 		WithEventFilter(&class.Filter{
 			ClassName: r.Config.ClassName,
 		}).
-		For(&goharborv1alpha1.Harbor{}).
+		For(&goharborv1alpha2.Harbor{}).
 		Owns(&appsv1.Deployment{}).
 		Owns(&certv1.Certificate{}).
 		Owns(&corev1.ConfigMap{}).
@@ -78,7 +73,7 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-func New(ctx context.Context, name, version string, config *Config) (*Reconciler, error) {
+func New(ctx context.Context, name, version string, config *config.Config) (*Reconciler, error) {
 	return &Reconciler{
 		Controller: common.Controller{
 			Name:    name,

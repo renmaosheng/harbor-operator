@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/application"
 )
 
@@ -37,10 +37,10 @@ func (r *Registry) GetIngresses(ctx context.Context) []*netv1.Ingress { // nolin
 	return []*netv1.Ingress{
 		{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      r.harbor.NormalizeComponentName(goharborv1alpha1.RegistryName),
+				Name:      r.harbor.NormalizeComponentName(goharborv1alpha2.RegistryName),
 				Namespace: r.harbor.Namespace,
 				Labels: map[string]string{
-					"app":      goharborv1alpha1.RegistryName,
+					"app":      goharborv1alpha2.RegistryName,
 					"harbor":   harborName,
 					"operator": operatorName,
 				},
@@ -56,7 +56,7 @@ func (r *Registry) GetIngresses(ctx context.Context) []*netv1.Ingress { // nolin
 									{
 										Path: "/v2",
 										Backend: netv1.IngressBackend{
-											ServiceName: r.harbor.NormalizeComponentName(goharborv1alpha1.RegistryName),
+											ServiceName: r.harbor.NormalizeComponentName(goharborv1alpha2.RegistryName),
 											ServicePort: intstr.FromInt(PublicPort),
 										},
 									},

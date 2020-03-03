@@ -1,0 +1,7 @@
+apiVersion: containerregistry.ovhcloud.com/v1alpha2
+kind: Portal
+metadata:
+  name: portal-sample
+spec:
+  # Add fields here
+  foo: bar

@@ -52,7 +52,13 @@ manifests: controller-gen
 		paths="./..."
 
 # Generate code
-generate: controller-gen pkged.go
+generate: controller-gen
+	find "$(CURDIR)/api" \
+		-type f \
+		-name 'zz_generated.*.go' \
+		-delete
+	go mod vendor
+	$(MAKE) pkged.go
 	$(CONTROLLER_GEN) \
 		object:headerFile="./hack/boilerplate.go.txt" \
 		paths="./..."

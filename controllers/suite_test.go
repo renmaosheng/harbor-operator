@@ -78,6 +78,7 @@ var _ = BeforeSuite(func(done Done) {
 
 	s, err := scheme.New(ctx)
 	Expect(err).ToNot(HaveOccurred())
+
 	// +kubebuilder:scaffold:scheme
 
 	k8sClient, err = client.New(cfg, client.Options{Scheme: s})

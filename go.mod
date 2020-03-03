@@ -3,6 +3,7 @@ module github.com/goharbor/harbor-operator
 go 1.13
 
 require (
+	github.com/blang/semver v3.5.0+incompatible
 	github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd // indirect
 	github.com/go-kit/kit v0.8.0
 	github.com/go-logr/logr v0.1.0
@@ -25,4 +26,5 @@ require (
 	k8s.io/apimachinery v0.0.0-20191028221656-72ed19daf4bb
 	k8s.io/client-go v0.0.0-20191114101535-6c5935290e33
 	sigs.k8s.io/controller-runtime v0.4.0
+	sigs.k8s.io/kustomize/kstatus v0.0.1
 )

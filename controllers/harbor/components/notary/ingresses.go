@@ -10,7 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/application"
 )
 
@@ -37,13 +37,13 @@ func (n *Notary) GetIngresses(ctx context.Context) []*netv1.Ingress {
 	return []*netv1.Ingress{
 		{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      n.harbor.NormalizeComponentName(goharborv1alpha1.NotaryName),
+				Name:      n.harbor.NormalizeComponentName(goharborv1alpha2.NotaryName),
 				Namespace: n.harbor.Namespace,
 				Labels: map[string]string{
-					"app":                         goharborv1alpha1.NotaryName,
+					"app":                         goharborv1alpha2.NotaryName,
 					"harbor":                      harborName,
 					"operator":                    operatorName,
-					"kubernetes.io/ingress.class": goharborv1alpha1.NotaryName,
+					"kubernetes.io/ingress.class": goharborv1alpha2.NotaryName,
 				},
 			},
 			Spec: netv1.IngressSpec{

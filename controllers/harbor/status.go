@@ -10,28 +10,28 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
 )
 
-func (r *Reconciler) GetCondition(ctx context.Context, harbor *goharborv1alpha1.Harbor, conditionType goharborv1alpha1.HarborConditionType) goharborv1alpha1.HarborCondition {
+func (r *Reconciler) GetCondition(ctx context.Context, harbor *goharborv1alpha2.Harbor, conditionType goharborv1alpha2.HarborConditionType) goharborv1alpha2.HarborCondition {
 	for _, condition := range harbor.Status.Conditions {
 		if condition.Type == conditionType {
 			return condition
 		}
 	}
 
-	return goharborv1alpha1.HarborCondition{
+	return goharborv1alpha2.HarborCondition{
 		Type:   conditionType,
 		Status: corev1.ConditionUnknown,
 	}
 }
 
-func (r *Reconciler) GetConditionStatus(ctx context.Context, harbor *goharborv1alpha1.Harbor, conditionType goharborv1alpha1.HarborConditionType) corev1.ConditionStatus {
+func (r *Reconciler) GetConditionStatus(ctx context.Context, harbor *goharborv1alpha2.Harbor, conditionType goharborv1alpha2.HarborConditionType) corev1.ConditionStatus {
 	return r.GetCondition(ctx, harbor, conditionType).Status
 }
 
-func (r *Reconciler) UpdateCondition(ctx context.Context, harbor *goharborv1alpha1.Harbor, conditionType goharborv1alpha1.HarborConditionType, status corev1.ConditionStatus, reasons ...string) error {
+func (r *Reconciler) UpdateCondition(ctx context.Context, harbor *goharborv1alpha2.Harbor, conditionType goharborv1alpha2.HarborConditionType, status corev1.ConditionStatus, reasons ...string) error {
 	var reason, message string
 
 	switch len(reasons) {
@@ -65,7 +65,7 @@ func (r *Reconciler) UpdateCondition(ctx context.Context, harbor *goharborv1alph
 		}
 	}
 
-	condition := goharborv1alpha1.HarborCondition{
+	condition := goharborv1alpha2.HarborCondition{
 		Type:    conditionType,
 		Status:  status,
 		Reason:  reason,
@@ -81,7 +81,7 @@ func (r *Reconciler) UpdateCondition(ctx context.Context, harbor *goharborv1alph
 
 // UpdateStatus applies current in-memory statuses to the remote resource
 // https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/#status-subresource
-func (r *Reconciler) UpdateStatus(ctx context.Context, result *ctrl.Result, harbor *goharborv1alpha1.Harbor) error {
+func (r *Reconciler) UpdateStatus(ctx context.Context, result *ctrl.Result, harbor *goharborv1alpha2.Harbor) error {
 	err := r.Status().Update(ctx, harbor)
 	if err != nil {
 		result.Requeue = true

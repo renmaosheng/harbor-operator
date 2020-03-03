@@ -3,11 +3,11 @@ package registry
 import (
 	"context"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 )
 
 type Registry struct {
-	harbor *goharborv1alpha1.Harbor
+	harbor *goharborv1alpha2.Harbor
 	Option Option
 }
 
@@ -15,7 +15,7 @@ type Option interface {
 	GetPriority() *int32
 }
 
-func New(ctx context.Context, harbor *goharborv1alpha1.Harbor, opt Option) (*Registry, error) {
+func New(ctx context.Context, harbor *goharborv1alpha2.Harbor, opt Option) (*Registry, error) {
 	return &Registry{
 		harbor: harbor,
 		Option: opt,

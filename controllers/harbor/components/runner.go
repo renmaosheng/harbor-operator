@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 
-	goharborv1alpha1 "github.com/goharbor/harbor-operator/api/v1alpha1"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
 )
 
@@ -15,23 +15,23 @@ type ComponentRunner struct {
 	Component
 }
 
-type Run func(context.Context, *goharborv1alpha1.Harbor, *ComponentRunner) error
+type Run func(context.Context, *goharborv1alpha2.Harbor, *ComponentRunner) error
 
-func (r *Components) ParallelRun(ctx context.Context, harbor *goharborv1alpha1.Harbor, run Run) error {
+func (r *Components) ParallelRun(ctx context.Context, harbor *goharborv1alpha2.Harbor, run Run) error {
 	var g errgroup.Group
 
-	g.Go(run.getRunFunc(ctx, harbor, r.Core, goharborv1alpha1.CoreName))
-	g.Go(run.getRunFunc(ctx, harbor, r.Registry, goharborv1alpha1.RegistryName))
-	g.Go(run.getRunFunc(ctx, harbor, r.JobService, goharborv1alpha1.JobServiceName))
-	g.Go(run.getRunFunc(ctx, harbor, r.Portal, goharborv1alpha1.PortalName))
-	g.Go(run.getRunFunc(ctx, harbor, r.ChartMuseum, goharborv1alpha1.ChartMuseumName))
-	g.Go(run.getRunFunc(ctx, harbor, r.Clair, goharborv1alpha1.ClairName))
-	g.Go(run.getRunFunc(ctx, harbor, r.Notary, goharborv1alpha1.NotaryName))
+	g.Go(run.getRunFunc(ctx, harbor, r.Core, goharborv1alpha2.CoreName))
+	g.Go(run.getRunFunc(ctx, harbor, r.Registry, goharborv1alpha2.RegistryName))
+	g.Go(run.getRunFunc(ctx, harbor, r.JobService, goharborv1alpha2.JobServiceName))
+	g.Go(run.getRunFunc(ctx, harbor, r.Portal, goharborv1alpha2.PortalName))
+	g.Go(run.getRunFunc(ctx, harbor, r.ChartMuseum, goharborv1alpha2.ChartMuseumName))
+	g.Go(run.getRunFunc(ctx, harbor, r.Clair, goharborv1alpha2.ClairName))
+	g.Go(run.getRunFunc(ctx, harbor, r.Notary, goharborv1alpha2.NotaryName))
 
 	return g.Wait()
 }
 
-func (r Run) getRunFunc(ctx context.Context, harbor *goharborv1alpha1.Harbor, runner *ComponentRunner, name string) func() error {
+func (r Run) getRunFunc(ctx context.Context, harbor *goharborv1alpha2.Harbor, runner *ComponentRunner, name string) func() error {
 	return func() error {
 		if runner == nil {
 			return nil
@@ -50,13 +50,13 @@ func (r Run) getRunFunc(ctx context.Context, harbor *goharborv1alpha1.Harbor, ru
 	}
 }
 
-type ComponentRun func(context.Context, *goharborv1alpha1.Harbor, []Resource) error
+type ComponentRun func(context.Context, *goharborv1alpha2.Harbor, []Resource) error
 
 // ParallelRun run a function over all resources of a component.
 // This is a wrapper which use errgroup.
 // The main goal of this method is to centralize action over Resource
 // and not forget any resources anywhere else in the code.
-func (c *ComponentRunner) ParallelRun(ctx context.Context, harbor *goharborv1alpha1.Harbor, servicesRun, configMapsRun, ingressesRun, secretsRun, certificatesRun, deploymentsRun ComponentRun, waitBeforeDeployments bool) error {
+func (c *ComponentRunner) ParallelRun(ctx context.Context, harbor *goharborv1alpha2.Harbor, servicesRun, configMapsRun, ingressesRun, secretsRun, certificatesRun, deploymentsRun ComponentRun, waitBeforeDeployments bool) error {
 	if c == nil {
 		return nil
 	}
@@ -81,7 +81,7 @@ func (c *ComponentRunner) ParallelRun(ctx context.Context, harbor *goharborv1alp
 	return g.Wait()
 }
 
-func (c *ComponentRun) getRunFunc(ctx context.Context, harbor *goharborv1alpha1.Harbor, resources []Resource, kind string) func() error {
+func (c *ComponentRun) getRunFunc(ctx context.Context, harbor *goharborv1alpha2.Harbor, resources []Resource, kind string) func() error {
 	return func() error {
 		if c == nil {
 			return nil
