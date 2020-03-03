@@ -8,7 +8,7 @@ import (
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/ovh/goharbor/pkg/graph"
+	"github.com/goharbor/harbor-operator/pkg/graph"
 )
 
 func (c *Controller) Create(ctx context.Context, node graph.Resource) error {

@@ -11,12 +11,22 @@ import (
 func (r *Reconciler) AddResources(ctx context.Context, portal *goharborv1alpha2.Portal) error {
 	service, err := r.GetService(ctx, portal)
 	if err != nil {
-		return errors.Wrap(err, "cannot get configMap")
+		return errors.Wrap(err, "cannot get service")
 	}
 
-	err = r.Controller.AddResourceToManage(ctx, service)
+	_, err = r.Controller.AddBasicObjectToManage(ctx, service)
 	if err != nil {
-		return errors.Wrapf(err, "cannot add resource %+v", cm)
+		return errors.Wrapf(err, "cannot add service %+v", service)
+	}
+
+	deployment, err := r.GetDeployment(ctx, portal)
+	if err != nil {
+		return errors.Wrap(err, "cannot get deployment")
+	}
+
+	_, err = r.Controller.AddBasicObjectToManage(ctx, deployment)
+	if err != nil {
+		return errors.Wrapf(err, "cannot add deployment %+v", deployment)
 	}
 
 	return errors.New("not yet implemented")

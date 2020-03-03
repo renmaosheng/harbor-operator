@@ -2,6 +2,7 @@ package portal
 
 import (
 	"context"
+	"fmt"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -22,45 +23,41 @@ var (
 	varFalse                   = false
 )
 
-func (r *Reconciler) GetDeployments(ctx context.Context) (*appsv1.Deployment, error) { // nolint:funlen
-	operatorName := application.GetName(ctx)
-
-	image, err := m.Portal.Spec.GetImage()
+func (r *Reconciler) GetDeployment(ctx context.Context, portal *goharborv1alpha2.Portal) (*appsv1.Deployment, error) { // nolint:funlen
+	image, err := portal.Spec.GetImage()
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot get image")
 	}
 
-	return *appsv1.Deployment{
+	return &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      m.Portal.Name,
-			Namespace: m.Portal.Namespace,
+			Name:      fmt.Sprintf("%s-portal", portal.Name),
+			Namespace: portal.GetNamespace(),
 			Labels: map[string]string{
-				"app":      goharborv1alpha2.PortalName,
-				"operator": operatorName,
+				"portal-name":      portal.GetName(),
+				"portal-namespace": portal.GetNamespace(),
 			},
 		},
 		Spec: appsv1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					"app":      goharborv1alpha2.PortalName,
-					"operator": operatorName,
+					"portal-name":      portal.GetName(),
+					"portal-namespace": portal.GetNamespace(),
 				},
 			},
-			Replicas: m.Portal.Spec.Replicas,
+			Replicas: portal.Spec.Replicas,
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Annotations: map[string]string{
-						"configuration/checksum": "",
-						"secret/checksum":        "",
-						"operator/version":       application.GetVersion(ctx),
+						"operator/version": application.GetVersion(ctx),
 					},
 					Labels: map[string]string{
-						"app":      goharborv1alpha2.PortalName,
-						"operator": operatorName,
+						"portal-name":      portal.GetName(),
+						"portal-namespace": portal.GetNamespace(),
 					},
 				},
 				Spec: corev1.PodSpec{
-					NodeSelector:                 m.Portal.Spec.NodeSelector,
+					NodeSelector:                 portal.Spec.NodeSelector,
 					AutomountServiceAccountToken: &varFalse,
 					Containers: []corev1.Container{
 						{
@@ -91,7 +88,7 @@ func (r *Reconciler) GetDeployments(ctx context.Context) (*appsv1.Deployment, er
 							},
 						},
 					},
-					Priority: m.Portal.Spec.Priority,
+					Priority: portal.Spec.Priority,
 				},
 			},
 			RevisionHistoryLimit: &revisionHistoryLimit,
