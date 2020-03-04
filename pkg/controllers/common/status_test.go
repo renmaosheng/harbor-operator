@@ -130,12 +130,12 @@ var _ = Describe("status", func() {
 			var condition status.Condition
 
 			JustBeforeEach(func() {
-				condition = status.Condition{
+				condition = goharborv1alpha2.Condition{
 					Type:   status.ConditionFailed,
 					Reason: "",
 					Status: corev1.ConditionTrue,
 				}
-				h.Status.Conditions = []status.Condition{condition}
+				h.Status.Conditions = []goharborv1alpha2.Condition{condition}
 			})
 
 			Describe("Update Ready condition to False", func() {
@@ -235,7 +235,7 @@ var _ = Describe("status", func() {
 					Reason: "",
 					Status: corev1.ConditionTrue,
 				}
-				h.Status.Conditions = []status.Condition{condition}
+				h.Status.Conditions = []goharborv1alpha2.Condition{condition}
 			})
 
 			Describe("Update Ready condition to False", func() {
@@ -333,7 +333,7 @@ var _ = Describe("status", func() {
 					Reason: "",
 					Status: corev1.ConditionTrue,
 				}
-				h.Status.Conditions = []status.Condition{readyCondition, appliedCondition}
+				h.Status.Conditions = []goharborv1alpha2.Condition{readyCondition, appliedCondition}
 			})
 
 			Describe("Get Ready condition", func() {

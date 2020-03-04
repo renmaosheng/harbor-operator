@@ -31,12 +31,8 @@ func (r *Reconciler) GetDeployment(ctx context.Context, portal *goharborv1alpha2
 
 	return &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%s-portal", portal.Name),
+			Name:      fmt.Sprintf("%s-portal", portal.GetName()),
 			Namespace: portal.GetNamespace(),
-			Labels: map[string]string{
-				"portal-name":      portal.GetName(),
-				"portal-namespace": portal.GetNamespace(),
-			},
 		},
 		Spec: appsv1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{

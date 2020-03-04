@@ -15,14 +15,14 @@ import (
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
 )
 
-func (r *Controller) GetCondition(ctx context.Context, componentStatus *goharborv1alpha2.ComponentStatus, conditionType status.ConditionType) status.Condition {
+func (r *Controller) GetCondition(ctx context.Context, componentStatus *goharborv1alpha2.ComponentStatus, conditionType status.ConditionType) goharborv1alpha2.Condition {
 	for _, condition := range componentStatus.Conditions {
 		if condition.Type == conditionType {
 			return condition
 		}
 	}
 
-	return status.Condition{
+	return goharborv1alpha2.Condition{
 		Type:   conditionType,
 		Status: corev1.ConditionUnknown,
 	}
@@ -58,7 +58,7 @@ func (r *Controller) UpdateCondition(ctx context.Context, componentStatus *gohar
 		}
 	}
 
-	condition := status.Condition{
+	condition := goharborv1alpha2.Condition{
 		Type:    conditionType,
 		Status:  conditionStatus,
 		Reason:  reason,

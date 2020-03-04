@@ -5,19 +5,21 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/goharbor/harbor-operator/controllers/harbor"
+	"github.com/goharbor/harbor-operator/controllers/portal"
+	"github.com/goharbor/harbor-operator/pkg/controllers"
 	"github.com/goharbor/harbor-operator/pkg/controllers/config"
 )
 
 const (
-	ConfigPrefix = "portal-controller"
+	Name         = "portal"
+	ConfigPrefix = Name + "-controller"
 )
 
-func New(ctx context.Context, name, version string) (*harbor.Reconciler, error) {
+func New(ctx context.Context, version string) (controllers.Controller, error) {
 	config, err := config.GetConfig(ConfigPrefix)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot get configuration")
 	}
 
-	return harbor.New(ctx, name, version, config)
+	return portal.New(ctx, Name, version, config)
 }

@@ -147,7 +147,7 @@ var _ = Describe("Check the status", func() {
 		Context("With basic inprogress status", func() {
 			Context("To True", func() {
 				BeforeEach(func() {
-					data.Status.Conditions = []status.Condition{
+					data.Status.Conditions = []goharborv1alpha2.Condition{
 						{
 							Type:   status.ConditionInProgress,
 							Status: corev1.ConditionTrue,
@@ -164,7 +164,7 @@ var _ = Describe("Check the status", func() {
 
 			Context("To False", func() {
 				BeforeEach(func() {
-					data.Status.Conditions = []status.Condition{
+					data.Status.Conditions = []goharborv1alpha2.Condition{
 						{
 							Type:   status.ConditionInProgress,
 							Status: corev1.ConditionFalse,

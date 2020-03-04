@@ -11,7 +11,8 @@ import (
 
 	// +kubebuilder:scaffold:imports
 
-	"github.com/goharbor/harbor-operator/pkg/controllers"
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
+	"github.com/goharbor/harbor-operator/pkg/controllers/setup"
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
 	"github.com/goharbor/harbor-operator/pkg/manager"
 	"github.com/goharbor/harbor-operator/pkg/scheme"
@@ -75,7 +76,7 @@ func main() {
 		os.Exit(exitCodeFailure)
 	}
 
-	if err := (controllers.SetupWithManager(ctx, mgr, OperatorVersion)); err != nil {
+	if err := (setup.SetupWithManager(ctx, mgr, OperatorVersion)); err != nil {
 		setupLog.Error(err, "unable to setup controllers")
 		os.Exit(exitCodeFailure)
 	}

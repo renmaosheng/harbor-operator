@@ -8,6 +8,10 @@ import (
 	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 )
 
+func (r *Reconciler) InitResources() error {
+	return nil
+}
+
 func (r *Reconciler) AddResources(ctx context.Context, portal *goharborv1alpha2.Portal) error {
 	service, err := r.GetService(ctx, portal)
 	if err != nil {
@@ -24,10 +28,10 @@ func (r *Reconciler) AddResources(ctx context.Context, portal *goharborv1alpha2.
 		return errors.Wrap(err, "cannot get deployment")
 	}
 
-	_, err = r.Controller.AddBasicObjectToManage(ctx, deployment)
+	_, err = r.Controller.AddDeploymentToManage(ctx, deployment)
 	if err != nil {
 		return errors.Wrapf(err, "cannot add deployment %+v", deployment)
 	}
 
-	return errors.New("not yet implemented")
+	return nil
 }

@@ -89,7 +89,7 @@ var _ = Context("Inside of a new namespace", func() {
 			})
 		})
 
-		Context("with valid spec", func() {
+		PContext("with valid spec", func() {
 			It("should be handled", func() {
 				harbor, key := newValidHarborTest(ns.Name)
 
@@ -98,7 +98,7 @@ var _ = Context("Inside of a new namespace", func() {
 				Expect(k8sClient.Create(ctx, harbor)).To(Succeed())
 				Eventually(getHarbor).Should(Succeed(), "harbor resource should exist")
 
-				getConditions := func(harbor *goharborv1alpha2.Harbor) []goharborv1alpha2.ComponentCondition {
+				getConditions := func(harbor *goharborv1alpha2.Harbor) []goharborv1alpha2.Condition {
 					return harbor.Status.Conditions
 				}
 				Eventually(getResourceFunc(ctx, key, harbor, getConditions), applyTimeoutInterval).Should(ContainElement(gstruct.MatchFields(gstruct.IgnoreExtras, gstruct.Fields{

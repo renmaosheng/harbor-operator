@@ -18,7 +18,7 @@ const (
 func (r *Reconciler) GetService(ctx context.Context, portal *goharborv1alpha2.Portal) (*corev1.Service, error) {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%s-portal", portal.Name),
+			Name:      fmt.Sprintf("%s-portal", portal.GetName()),
 			Namespace: portal.GetNamespace(),
 		},
 		Spec: corev1.ServiceSpec{

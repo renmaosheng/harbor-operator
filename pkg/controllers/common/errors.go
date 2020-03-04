@@ -1,8 +1,9 @@
 package common
 
 import (
-	serrors "github.com/goharbor/harbor-operator/pkg/controllers/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
+
+	serrors "github.com/goharbor/harbor-operator/pkg/controllers/common/errors"
 )
 
 func (c *Controller) HandleError(err error) (ctrl.Result, error) {

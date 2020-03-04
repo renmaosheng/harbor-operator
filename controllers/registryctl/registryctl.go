@@ -7,11 +7,9 @@ import (
 	"github.com/go-logr/logr"
 	certv1 "github.com/jetstack/cert-manager/pkg/apis/certmanager/v1alpha2"
 	"github.com/pkg/errors"
-	"golang.org/x/sync/errgroup"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	netv1 "k8s.io/api/networking/v1beta1"
-	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 
@@ -30,18 +28,15 @@ const (
 type Reconciler struct {
 	common.Controller
 
-	Log    logr.Logger
-	Scheme *runtime.Scheme
+	Log logr.Logger
 
 	Config config.Config
 }
 
 func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
-	r.Scheme = mgr.GetScheme()
-
-	err := r.Init()
+	err := r.InitResources()
 	if err != nil {
-		return errors.Wrap(err, "failed to init controller")
+		return errors.Wrap(err, "cannot initialize resources")
 	}
 
 	return ctrl.NewControllerManagedBy(mgr).
@@ -60,20 +55,6 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 		}).
 		Complete(r)
 }
-
-func (r *Reconciler) Init() error {
-	var g errgroup.Group
-
-	g.Go(func() error {
-		err := r.InitConfigMaps()
-		return errors.Wrap(err, "configMaps")
-	})
-
-	return g.Wait()
-}
-
-// +kubebuilder:rbac:groups=containerregistryctl.ovhcloud.com,resources=registries,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=containerregistryctl.ovhcloud.com,resources=registries/status,verbs=get;update;patch
 
 func New(ctx context.Context, name, version string, config *config.Config) (*Reconciler, error) {
 	return &Reconciler{

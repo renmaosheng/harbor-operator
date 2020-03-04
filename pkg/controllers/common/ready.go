@@ -8,7 +8,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	serrors "github.com/goharbor/harbor-operator/pkg/controllers/errors"
+	serrors "github.com/goharbor/harbor-operator/pkg/controllers/common/errors"
 	"github.com/goharbor/harbor-operator/pkg/graph"
 )
 

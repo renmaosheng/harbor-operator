@@ -5,6 +5,7 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/log"
+	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
@@ -52,6 +53,9 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	err = r.AddResources(ctx, registryctl)
+	if err != nil {
+		return reconcile.Result{}, errors.Wrap(err, "cannot add resources")
+	}
 
 	return r.Controller.Reconcile(ctx, registryctl)
 }

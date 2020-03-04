@@ -1,6 +1,7 @@
 package v1alpha2
 
 import (
+	cmmeta "github.com/jetstack/cert-manager/pkg/apis/meta/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -41,6 +42,14 @@ type NotarySignerSpec struct {
 
 	// +kubebuilder:validation:Required
 	CertificateSecret string `json:"certificateSecret"`
+
+	// The issuer for Harbor certificates.
+	// If the 'kind' field is not set, or set to 'Issuer', an Issuer resource
+	// with the given name in the same namespace as the Certificate will be used.
+	// If the 'kind' field is set to 'ClusterIssuer', a ClusterIssuer with the
+	// provided name will be used.
+	// The 'name' field in this stanza is required at all times.
+	CertificateIssuerRef cmmeta.ObjectReference `json:"certificateIssuerRef"`
 }
 
 // nolint:gochecknoinits
