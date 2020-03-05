@@ -142,7 +142,7 @@ type HarborComponents struct {
 type ClairAdapterComponent struct {
 	Image *string `json:"image,omitempty"`
 
-	Version Version `json:"version"`
+	Version string `json:"version"`
 
 	// +kubebuilder:validation:Required
 	RedisSecret string `json:"redisSecret"`

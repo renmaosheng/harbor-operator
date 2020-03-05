@@ -9,13 +9,13 @@ type NodeSelector map[string]string
 
 type ComponentSpec struct {
 	// +kubebuilder:validation:Required
-	Version Version `json:"version,omitempty"`
+	Version string `json:"version"`
 
 	// Number of desired pods. This is a pointer to distinguish between explicit
 	// zero and not specified. Defaults to 1.
 	// +kubebuilder:validation:Minimum=1
 	// +kubebuilder:validation:Required
-	Replicas *int32 `json:"replicas,omitempty"`
+	Replicas *int32 `json:"replicas"`
 
 	// +kubebuilder:validation:Optional
 	Priority *int32 `json:"priority,omitempty"`
@@ -35,10 +35,12 @@ type ComponentStatus struct {
 }
 
 type Result struct {
-	//Status
+	// Status
 	Status status.Status `json:"status"`
+
 	// Message
 	Message string `json:"message"`
+
 	// Conditions list of extracted conditions from Resource
 	Conditions []Condition `json:"conditions"`
 }
@@ -49,10 +51,13 @@ type Result struct {
 type Condition struct {
 	// Type condition type
 	Type status.ConditionType `json:"type"`
+
 	// Status String that describes the condition status
 	Status corev1.ConditionStatus `json:"status"`
+
 	// Reason one work CamelCase reason
 	Reason string `json:"reason"`
+
 	// Message Human readable reason string
 	Message string `json:"message"`
 }

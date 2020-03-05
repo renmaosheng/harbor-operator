@@ -50,7 +50,7 @@ func init() {
 }
 
 func (component *ChartMuseumSpec) GetImage() (string, error) {
-	return ChartMuseumImages.GetTag(component.Version.Version)
+	return ChartMuseumImages.GetTag(semver.MustParse(component.Version))
 }
 
 var (
@@ -71,7 +71,7 @@ func init() {
 }
 
 func (component *ClairSpec) GetImage() (string, error) {
-	return ClairImages.GetTag(component.Version.Version)
+	return ClairImages.GetTag(semver.MustParse(component.Version))
 }
 
 var (
@@ -93,7 +93,7 @@ func init() {
 }
 
 func (component *ClairSpec) GetAdapterImage() (string, error) {
-	return ClairAdapterImages.GetTag(component.Version.Version)
+	return ClairAdapterImages.GetTag(semver.MustParse(component.Version))
 }
 
 var (
@@ -115,7 +115,7 @@ func init() {
 }
 
 func (component *NotaryServerSpec) GetImage() (string, error) {
-	return NotaryServerImages.GetTag(component.Version.Version)
+	return NotaryServerImages.GetTag(semver.MustParse(component.Version))
 }
 
 var (
@@ -137,7 +137,7 @@ func init() {
 }
 
 func (component *NotarySignerSpec) GetImage() (string, error) {
-	return NotarySignerImages.GetTag(component.Version.Version)
+	return NotarySignerImages.GetTag(semver.MustParse(component.Version))
 }
 
 var (
@@ -159,5 +159,5 @@ func init() {
 }
 
 func (component *RegistrySpec) GetImage() (string, error) {
-	return RegistryImages.GetTag(component.Version.Version)
+	return RegistryImages.GetTag(semver.MustParse(component.Version))
 }
