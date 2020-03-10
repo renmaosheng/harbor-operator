@@ -4,9 +4,19 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// +kubebuilder:object:root=true
+// +genclient
 
-// Clair is the Schema for the clairs API
+// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+
+// Clair is the Schema for the registries API
+// +kubebuilder:object:root=true
+// +kubebuilder:storageversion
+// +k8s:openapi-gen=true
+// +resource:path=clair
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Version",type=string,JSONPath=`.spec.version`,description="The semver Harbor version",priority=5
+// +kubebuilder:printcolumn:name="Replicas",type=string,JSONPath=`.spec.publicURL`,description="The public URL to the Harbor application",priority=0
+// +kubebuilder:printcolumn:name="Status",type=string,JSONPath=`.status.conditions[?(@.statys==true)].type`,description="The current status of the Harbor application",priority=10
 type Clair struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -33,17 +43,6 @@ type ClairSpec struct {
 
 	// +kubebuilder:validation:Required
 	DatabaseSecret string `json:"databaseSecret"`
-
-	// +kubebuilder:validation:Optional
-	VulnerabilitySources []string `json:"vulnerabilitySources"`
-
-	// +kubebuilder:validation:Required
-	Adapter Adapter `json:"adapter"`
-}
-
-type Adapter struct {
-	// +kubebuilder:validation:Required
-	RedisSecret string `json:"redisSecret"`
 }
 
 // nolint:gochecknoinits

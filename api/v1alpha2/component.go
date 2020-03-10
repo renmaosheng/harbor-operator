@@ -24,6 +24,8 @@ type ComponentSpec struct {
 	NodeSelector NodeSelector `json:"nodeSelector,omitempty"`
 
 	// +kubebuilder:validation:Optional
+	// +listType:map
+	// +listMapKey:name
 	ImagePullSecrets []corev1.LocalObjectReference `json:"imagePullSecrets,omitempty" patchStrategy:"merge" patchMergeKey:"name"`
 }
 
@@ -42,6 +44,8 @@ type Result struct {
 	Message string `json:"message"`
 
 	// Conditions list of extracted conditions from Resource
+	// +listType:map
+	// +listMapKey:type
 	Conditions []Condition `json:"conditions"`
 }
 

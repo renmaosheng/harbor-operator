@@ -4,9 +4,19 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// +kubebuilder:object:root=true
+// +genclient
+
+// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // Portal is the Schema for the portals API
+// +kubebuilder:object:root=true
+// +kubebuilder:storageversion
+// +k8s:openapi-gen=true
+// +resource:path=portal
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Version",type=string,JSONPath=`.spec.version`,description="The semver Harbor version",priority=5
+// +kubebuilder:printcolumn:name="Replicas",type=string,JSONPath=`.spec.publicURL`,description="The public URL to the Harbor application",priority=0
+// +kubebuilder:printcolumn:name="Status",type=string,JSONPath=`.status.conditions[?(@.statys==true)].type`,description="The current status of the Harbor application",priority=10
 type Portal struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

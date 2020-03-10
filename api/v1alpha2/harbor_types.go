@@ -12,6 +12,7 @@ import (
 
 // Harbor is the Schema for the harbors API
 // +kubebuilder:object:root=true
+// +kubebuilder:storageversion
 // +k8s:openapi-gen=true
 // +resource:path=harbor
 // +kubebuilder:subresource:status
@@ -109,8 +110,9 @@ type NotarySignerComponent struct {
 
 	// Organization is the organization to be used on the Certificate
 	// +kubebuilder:validation:Optional
-	// +kubebuilder:validation:UniqueItems=true
 	// +kubebuilder:validation:MinItems=1
+	// This cannot be set to true: https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/#validation
+	// +listType:atomic
 	Organization []string `json:"organization"`
 
 	// KeySize is the key bit size of the corresponding private key for this certificate.
@@ -120,6 +122,20 @@ type NotarySignerComponent struct {
 	KeySize int `json:"keySize,omitempty"`
 }
 
+type ClairAdapterComponent struct {
+	// +kubebuilder:validation:Required
+	RedisSecret string `json:"redisSecret"`
+}
+
+type ClairComponent struct {
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinItems=1
+	// +listType:set
+	VulnerabilitySources []string `json:"vulnerabilitySources"`
+
+	// +kubebuilder:validation:Required
+	Adapter ClairAdapterComponent `json:"adapter"`
+}
 type HarborComponents struct {
 	Core *CoreComponent `json:"core"`
 
@@ -137,26 +153,6 @@ type HarborComponents struct {
 
 	NotaryServer *NotaryServerComponent `json:"notaryServer"`
 	NotarySigner *NotarySignerComponent `json:"notarySigner"`
-}
-
-type ClairAdapterComponent struct {
-	Image *string `json:"image,omitempty"`
-
-	Version string `json:"version"`
-
-	// +kubebuilder:validation:Required
-	RedisSecret string `json:"redisSecret"`
-}
-
-type ClairComponent struct {
-	ComponentSpec `json:",inline"`
-
-	// +kubebuilder:validation:Required
-	DatabaseSecret string `json:"databaseSecret"`
-
-	VulnerabilitySources []string `json:"vulnerabilitySources"`
-
-	Adapter ClairAdapterComponent `json:"adapter"`
 }
 
 // nolint:gochecknoinits

@@ -16,9 +16,19 @@ const (
 	ChartMuseumBasicAuthKey = "BASIC_AUTH_PASS"
 )
 
-// +kubebuilder:object:root=true
+// +genclient
 
-// ChartMuseum is the Schema for the chartmuseums API
+// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+
+// ChartMuseum is the Schema for the registries API
+// +kubebuilder:object:root=true
+// +kubebuilder:storageversion
+// +k8s:openapi-gen=true
+// +resource:path=chartmuseum
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Version",type=string,JSONPath=`.spec.version`,description="The semver Harbor version",priority=5
+// +kubebuilder:printcolumn:name="Replicas",type=string,JSONPath=`.spec.publicURL`,description="The public URL to the Harbor application",priority=0
+// +kubebuilder:printcolumn:name="Status",type=string,JSONPath=`.status.conditions[?(@.statys==true)].type`,description="The current status of the Harbor application",priority=10
 type ChartMuseum struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

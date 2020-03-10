@@ -8,14 +8,17 @@ all: manager
 
 # Run tests
 test: generate manifests
-	go test ./... -coverprofile cover.out
+	go test ./... \
+		-coverprofile cover.out
 
 # Build manager binary
 manager: generate fmt vet
-	go build -o bin/manager main.go
+	go build \
+		-o bin/manager \
+		main.go
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
-run: generate fmt vet manifests
+run: generate fmt vet manifests $(TMPDIR)k8s-webhook-server/serving-certs
 	CONFIGURATION_FROM='env:' \
 	go run *.go
 
@@ -40,10 +43,11 @@ dev-tools: \
 #####################
 
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
-CRD_OPTIONS ?= "crd:trivialVersions=false"
+CRD_OPTIONS ?= crd:trivialVersions=true crd:preserveUnknownFields=false
 
 # Generate manifests e.g. CRD, RBAC etc.
 manifests: controller-gen
+	find '$(CURDIR)/config/crd/bases' -type f -delete
 	$(CONTROLLER_GEN) \
 		$(CRD_OPTIONS) \
 		rbac:roleName="manager-role" \

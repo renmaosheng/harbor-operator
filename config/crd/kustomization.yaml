@@ -2,8 +2,15 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
+- bases/goharbor.io_chartmuseums.yaml
+- bases/goharbor.io_clairs.yaml
 - bases/goharbor.io_harbors.yaml
+- bases/goharbor.io_jobservices.yaml
+- bases/goharbor.io_notaryservers.yaml
+- bases/goharbor.io_notarysigners.yaml
 - bases/goharbor.io_portals.yaml
+- bases/goharbor.io_registries.yaml
+- bases/goharbor.io_registrycontrollers.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patchesStrategicMerge:
