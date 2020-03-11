@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-logr/logr"
 	certv1 "github.com/jetstack/cert-manager/pkg/apis/certmanager/v1alpha2"
+	"github.com/pkg/errors"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	netv1 "k8s.io/api/networking/v1beta1"
@@ -28,7 +29,7 @@ const (
 
 // Reconciler reconciles a Harbor object
 type Reconciler struct {
-	common.Controller
+	*common.Controller
 
 	Log    logr.Logger
 	Scheme *runtime.Scheme
@@ -56,6 +57,11 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Scheme:     r.Scheme,
 	}
 
+	err := r.Controller.SetupWithManager(mgr)
+	if err != nil {
+		return errors.Wrap(err, "cannot setup common controller")
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		WithEventFilter(&class.Filter{
 			ClassName: r.Config.ClassName,
@@ -75,11 +81,8 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 func New(ctx context.Context, name, version string, config *config.Config) (*Reconciler, error) {
 	return &Reconciler{
-		Controller: common.Controller{
-			Name:    name,
-			Version: version,
-		},
-		Log:    logger.Get(ctx).WithName("controller").WithName(name),
-		Config: *config,
+		Controller: common.NewController(name, version),
+		Log:        logger.Get(ctx).WithName("controller").WithName(name),
+		Config:     *config,
 	}, nil
 }

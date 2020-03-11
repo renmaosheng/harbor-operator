@@ -21,6 +21,10 @@ func NewResourceManager() *resourceManager {
 }
 
 func (rm *resourceManager) AddResource(resource Resource, blockers []Resource) error {
+	if resource == nil {
+		return nil
+	}
+
 	rm.lock.Lock()
 	defer rm.lock.Unlock()
 
@@ -30,6 +34,10 @@ func (rm *resourceManager) AddResource(resource Resource, blockers []Resource) e
 	}
 
 	for _, blocker := range blockers {
+		if blocker == nil {
+			continue
+		}
+
 		_, ok := rm.resources[blocker]
 		if !ok {
 			return errors.Errorf("unknown blocker %+v", blocker)

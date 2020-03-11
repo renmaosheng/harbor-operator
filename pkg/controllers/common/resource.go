@@ -19,6 +19,10 @@ type Resource struct {
 }
 
 func (c *Controller) AddInstantResourceToManage(ctx context.Context, resource resources.Resource, dependencies ...graph.Resource) (graph.Resource, error) {
+	if resource == nil {
+		return nil, nil
+	}
+
 	res := &Resource{
 		mutable:   c.GlobalMutateFn(ctx),
 		checkable: statuscheck.True,
@@ -28,6 +32,10 @@ func (c *Controller) AddInstantResourceToManage(ctx context.Context, resource re
 }
 
 func (c *Controller) AddUnsctructuredToManage(ctx context.Context, resource *unstructured.Unstructured, dependencies ...graph.Resource) (graph.Resource, error) {
+	if resource == nil {
+		return nil, nil
+	}
+
 	res := &Resource{
 		mutable:   c.GlobalMutateFn(ctx),
 		checkable: statuscheck.UnstructuredCheck,
@@ -37,6 +45,10 @@ func (c *Controller) AddUnsctructuredToManage(ctx context.Context, resource *uns
 }
 
 func (c *Controller) AddBasicObjectToManage(ctx context.Context, resource resources.Resource, dependencies ...graph.Resource) (graph.Resource, error) {
+	if resource == nil {
+		return nil, nil
+	}
+
 	res := &Resource{
 		mutable:   c.GlobalMutateFn(ctx),
 		checkable: statuscheck.BasicCheck,
@@ -46,6 +58,10 @@ func (c *Controller) AddBasicObjectToManage(ctx context.Context, resource resour
 }
 
 func (c *Controller) AddDeploymentToManage(ctx context.Context, resource *appsv1.Deployment, dependencies ...graph.Resource) (graph.Resource, error) {
+	if resource == nil {
+		return nil, nil
+	}
+
 	res := &Resource{
 		mutable:   c.DeploymentMutateFn(ctx),
 		checkable: statuscheck.BasicCheck,
@@ -55,6 +71,10 @@ func (c *Controller) AddDeploymentToManage(ctx context.Context, resource *appsv1
 }
 
 func (c *Controller) AddCertificateToManage(ctx context.Context, resource *certv1.Certificate, dependencies ...graph.Resource) (graph.Resource, error) {
+	if resource == nil {
+		return nil, nil
+	}
+
 	res := &Resource{
 		mutable:   c.GlobalMutateFn(ctx),
 		checkable: statuscheck.CertificateCheck,

@@ -28,6 +28,21 @@ type Controller struct {
 	graph graph.Manager
 }
 
+func NewController(name, version string) *Controller {
+	return &Controller{
+		Name:    name,
+		Version: version,
+		graph:   graph.NewResourceManager(),
+	}
+}
+
+func (r *Controller) SetupWithManager(mgr ctrl.Manager) error {
+	r.Client = mgr.GetClient()
+	r.Scheme = mgr.GetScheme()
+
+	return nil
+}
+
 func (r *Controller) GetVersion() string {
 	return r.Version
 }

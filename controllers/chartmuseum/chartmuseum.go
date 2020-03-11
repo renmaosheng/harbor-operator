@@ -25,7 +25,7 @@ const (
 
 // Reconciler reconciles a Harbor object
 type Reconciler struct {
-	common.Controller
+	*common.Controller
 
 	Log logr.Logger
 
@@ -36,6 +36,11 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 	err := r.InitResources()
 	if err != nil {
 		return errors.Wrap(err, "cannot initialize resources")
+	}
+
+	err = r.Controller.SetupWithManager(mgr)
+	if err != nil {
+		return errors.Wrap(err, "cannot setup common controller")
 	}
 
 	return ctrl.NewControllerManagedBy(mgr).
@@ -56,11 +61,8 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 func New(ctx context.Context, name, version string, config *config.Config) (*Reconciler, error) {
 	return &Reconciler{
-		Controller: common.Controller{
-			Name:    name,
-			Version: version,
-		},
-		Log:    logger.Get(ctx).WithName("controller").WithName(name),
-		Config: *config,
+		Controller: common.NewController(name, version),
+		Log:        logger.Get(ctx).WithName("controller").WithName(name),
+		Config:     *config,
 	}, nil
 }

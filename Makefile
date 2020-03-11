@@ -61,8 +61,8 @@ generate: controller-gen
 		-type f \
 		-name 'zz_generated.*.go' \
 		-delete
-	go mod vendor
 	$(MAKE) pkged.go
+	go mod vendor
 	$(CONTROLLER_GEN) \
 		object:headerFile="./hack/boilerplate.go.txt" \
 		paths="./..."
@@ -70,7 +70,7 @@ generate: controller-gen
 ASSETS := $(wildcard assets/*)
 
 pkged.go: pkger $(ASSETS)
-	$(PKGER) parse ; $(PKGER)
+	$(PKGER) parse; $(PKGER)
 
 # Build the docker image
 docker-build:
