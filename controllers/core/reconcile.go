@@ -12,7 +12,7 @@ import (
 	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/application"
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
-}
+)
 
 // +kubebuilder:rbac:groups=containerregistry.ovhcloud.com,resources=cores,verbs=get;list;watch
 // +kubebuilder:rbac:groups=containerregistry.ovhcloud.com,resources=cores/status,verbs=get;update;patch

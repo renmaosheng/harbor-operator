@@ -17,6 +17,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	goharborv1alpha2 "github.com/goharbor/harbor-operator/api/v1alpha2"
 	"github.com/goharbor/harbor-operator/pkg/factories/logger"
 )
 

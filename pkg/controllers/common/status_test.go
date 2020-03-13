@@ -127,7 +127,7 @@ var _ = Describe("status", func() {
 		})
 
 		Context("With Applied condition to True", func() {
-			var condition containerregistryv1alpha2.Condition
+			var condition goharborv1alpha2.Condition
 
 			JustBeforeEach(func() {
 				condition = goharborv1alpha2.Condition{
@@ -227,10 +227,10 @@ var _ = Describe("status", func() {
 		})
 
 		Context("With Ready condition to True", func() {
-			var condition containerregistryv1alpha2.Condition
+			var condition goharborv1alpha2.Condition
 
 			JustBeforeEach(func() {
-				condition = containerregistryv1alpha2.Condition{
+				condition = goharborv1alpha2.Condition{
 					Type:   status.ConditionInProgress,
 					Reason: "",
 					Status: corev1.ConditionTrue,
@@ -320,15 +320,15 @@ var _ = Describe("status", func() {
 		})
 
 		Context("With multiple conditions", func() {
-			var readyCondition containerregistryv1alpha2.Condition
+			var readyCondition goharborv1alpha2.Condition
 
 			JustBeforeEach(func() {
-				readyCondition = containerregistryv1alpha2.Condition{
+				readyCondition = goharborv1alpha2.Condition{
 					Type:   status.ConditionInProgress,
 					Reason: "",
 					Status: corev1.ConditionTrue,
 				}
-				appliedCondition := containerregistryv1alpha2.Condition{
+				appliedCondition := goharborv1alpha2.Condition{
 					Type:   status.ConditionFailed,
 					Reason: "",
 					Status: corev1.ConditionTrue,
