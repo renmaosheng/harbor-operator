@@ -1,0 +1,40 @@
+on:
+  push: {}
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  crd:
+    runs-on: ubuntu-latest
+    name: ./config/crd validation
+    steps: 
+    - name: actions/checkout@v2
+    - run: make manifests
+    - uses: azure/k8s-bake@v1
+      with:
+        renderEngine: 'kustomize'
+        kustomizationPath: './config/crd'
+        kubectl-version: 'latest'
+
+  operator:
+    runs-on: ubuntu-latest
+    name: ./config/default validation
+    steps: 
+    - name: actions/checkout@v2
+    - uses: azure/k8s-bake@v1
+      with:
+        renderEngine: 'kustomize'
+        kustomizationPath: './config/default'
+        kubectl-version: 'latest'
+
+  samples:
+    runs-on: ubuntu-latest
+    name: ./config/samples validation
+    steps: 
+    - name: actions/checkout@v2
+    - uses: azure/k8s-bake@v1
+      with:
+        renderEngine: 'kustomize'
+        kustomizationPath: './config/samples'
+        kubectl-version: 'latest'
